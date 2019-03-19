@@ -69,4 +69,24 @@ public class CameraTest {
         verifyNoMoreInteractions(sensor);
     }
 
+    @Test
+    public void cameraPowerDownSensorWhenWritingCompleted () {
+        Sensor sensor = mock(Sensor.class);
+        MemoryCard mc = mock(MemoryCard.class);
+
+        Camera camera = new Camera(sensor, mc);
+        camera.powerOn();
+        camera.pressShutter();
+        verify(sensor).powerUp();
+        verify(sensor).readData();
+
+        camera.powerOff();
+        verifyZeroInteractions(sensor);
+
+        camera.writeComplete();
+        verify(sensor).powerDown();
+
+    }
+
+
 }
