@@ -83,7 +83,10 @@ public class CameraTest {
         camera.powerOff();
         verifyZeroInteractions(sensor);
 
-        camera.writeComplete();
+        ArgumentCaptor<WriteCompleteListener> listener = ArgumentCaptor.forClass(WriteCompleteListener.class);
+        verify(mc).write(any(), listener.capture());
+
+        listener.getValue().writeComplete();
         verify(sensor).powerDown();
 
     }
